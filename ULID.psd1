@@ -10,4 +10,15 @@
     CmdletsToExport   = '*'
     VariablesToExport = '*'
     AliasesToExport   = '*'
+    PrivateData       = @{
+        PSData = @{
+            Category     = ""
+            Tags         = @('ULID', 'GUID', 'UUID')
+            IconUri      = ""
+            ProjectUri   = "https://github.com/PanekJ/ULID"
+            LicenseUri   = "https://raw.githubusercontent.com/PanekJ/ULID/master/LICENSE"
+            ReleaseNotes = ""
+            IsPrerelease = 'False'
+        }
+    }
 }
