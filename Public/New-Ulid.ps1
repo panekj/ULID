@@ -1,22 +1,18 @@
-function New-Ulid
-{
-    param
-    (
+function New-Ulid {
+    param(
         $Time,
         [switch] $Lowercase
     )
 
-    if (!$Time)
-    {
+    if (!$Time) {
         $Time = Get-Now
     }
-    if ($Lowercase)
-    {
+    if ($Lowercase) {
         $Encoding = $Encoding.toLower()
     }
 
-    $Timestamp = Encode-Time -Time $Time
-    $Randomness = Encode-Random -Length 16
+    $Timestamp = Convert-Time -Time $Time
+    $Randomness = Convert-Random -Length 16
     $String = $Timestamp + $Randomness
 
     $Object = [PSCustomObject]@{
@@ -26,6 +22,4 @@ function New-Ulid
     }
 
     return $Object
-
-    # Comment
 }

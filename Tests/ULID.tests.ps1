@@ -1,11 +1,11 @@
 $RootPath = Split-Path -Path $PSScriptRoot
-$ModulePath = Join-Path -Path $RootPath -ChildPath "Posh-Ulid.psm1"
+$ModulePath = Join-Path -Path $RootPath -ChildPath "ULID.psm1"
 
-Remove-Module Posh-Ulid -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
+Remove-Module ULID -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
 Import-Module $ModulePath
 
-InModuleScope Posh-Ulid {
-    Describe 'Posh-Ulid Unit Tests' {
+InModuleScope ULID {
+    Describe 'ULID Unit Tests' {
         Context 'Get-Now' {
             It 'Should be [UInt64]' {
                 Get-Now | Should BeOfType [UInt64]
@@ -19,44 +19,44 @@ InModuleScope Posh-Ulid {
             }
         }
 
-        Context 'Encode-Time' {
+        Context 'Convert-Time' {
             $Time = 1497346166809
             $TimeLength = 10
             $TestEncodedTime = "01BJGCJM0S"
 
             It 'Should be equal to test case' {
-                $EncodedTime = Encode-Time -Time $Time -Length $TimeLength
+                $EncodedTime = Convert-Time -Time $Time -Length $TimeLength
                 $EncodedTime | Should Be $TestEncodedTime
             }
 
             It 'Should change length properly' {
-                $EncodedTime = Encode-Time -Time $Time -Length 12
+                $EncodedTime = Convert-Time -Time $Time -Length 12
                 $EncodedTime | Should Be "0001BJGCJM0S"
             }
 
             It 'Should truncate time if not enough length' {
-                $EncodedTime = Encode-Time -Time $Time -Length 8
+                $EncodedTime = Convert-Time -Time $Time -Length 8
                 $EncodedTime | Should Be "BJGCJM0S"
             }
 
             It 'Should return correct length' {
-                $Result = Encode-Random -Length $TimeLength
+                $Result = Convert-Random -Length $TimeLength
                 $Result.Length | Should Be $TimeLength
             }
         }
 
-        Context 'Encode-Random' {
+        Context 'Convert-Random' {
             It 'Should return correct length' {
                 $Length = 12
 
-                $Result = Encode-Random -Length $Length
+                $Result = Convert-Random -Length $Length
 
                 $Result.Length | Should Be $Length
             }
 
             It 'Should NOT have two equal values' {
-                $Rnd1 = Encode-Random
-                $Rnd2 = Encode-Random
+                $Rnd1 = Convert-Random
+                $Rnd2 = Convert-Random
 
                 ($Rnd1 -eq $Rnd2) | Should Be $False
             }
@@ -88,7 +88,7 @@ InModuleScope Posh-Ulid {
 
                 $Ulid1 = (New-Ulid -Time $Time).Timestamp
                 $Ulid2 = (New-Ulid -Time $Time).Timestamp
-                
+
                 ($Ulid1 -eq $Ulid2) | Should Be $True
             }
 
@@ -101,17 +101,17 @@ InModuleScope Posh-Ulid {
             }
         }
 
-        Context 'Posh-Ulid.psm1' {
+        Context 'ULID.psm1' {
             It 'Should import' {
                 {
                     $RootPath = Split-Path -Path $PSScriptRoot
-                    $ModulePath = Join-Path -Path $RootPath -ChildPath "Posh-Ulid.psm1"
+                    $ModulePath = Join-Path -Path $RootPath -ChildPath "ULID.psm1"
                     Import-Module $ModulePath -ErrorAction Stop
                 } | Should Not Throw
             }
 
             It 'Should only expose certain functions' {
-                $ModuleContent = Get-Module Posh-Ulid 
+                $ModuleContent = Get-Module ULID
                 ($ModuleContent.ExportedCommands).Count | Should Be 1
             }
         }
